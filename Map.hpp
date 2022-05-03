@@ -8,6 +8,8 @@ public:
     Map();
     ~Map();
     void LoadMap(int arr[15000]);
+    void StartScreen() ;
+    void DisplayInstructions() ; 
     static void LoadMap1(std::string path, int x, int y);
     int mapxvel = 0;
     int mapyvel = 0;
@@ -23,5 +25,8 @@ private:
     SDL_Texture *water;
     SDL_Texture *new_map;
     SDL_Texture *iitd_map ;
+    SDL_Texture *start_screen ;
+    SDL_Texture *instruction_screen ; 
+    
     int map[15000];
 };

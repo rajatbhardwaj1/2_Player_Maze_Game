@@ -4,33 +4,31 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-
+#include "game.hpp"
 #include <iostream>
-class Game {
+class Game
+{
 
-    public :
-        Game();
-        ~Game() ; 
-        void init(const char * title  , int xpos , int ypos ,   int width , int height , bool fullscreen  ) ; 
-        void update( );
-        void render() ;
-        void clean (); 
-        static void AddTile(int id , int x , int y ) ;
-        
-        void handleEvents() ; 
-        bool running() {return isRunning;}
+public:
+    Game();
+    ~Game();
+    void init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
+    void update();
+    void render();
+    void clean();
+    void disp_startscreen();
+    void disp_instructions() ; 
+    static void AddTile(int id, int x, int y);
 
-        
-    static SDL_Renderer *renderer ;
-    static SDL_Event event ; 
-    
-    
+    void handleEvents();
+    bool running() { return isRunning; }
 
-    private : 
-    bool isRunning ; 
-    int cnt ; 
-    SDL_Window *window ;
-    
-  
+    static SDL_Renderer *renderer, *renderer1;
+    static SDL_Event event;
+
+private:
+    bool isRunning;
+    int cnt;
+    SDL_Window *window;
 };
-#endif  
+#endif
