@@ -30,7 +30,7 @@ int s2 = 0 ;
         struct sockaddr_in address;
         int opt = 1;
         int addrlen = sizeof(address);
-        char buffer[6] = {0};
+        char buffer[20] = {0};
 
         // Creating socket file descriptor
         if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -97,12 +97,14 @@ int s2 = 0 ;
                     game->update();
                     game->render();
                     const char *hello;
-                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos) + "\n";
+                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos)+"." ;
                     hello = s.c_str();
                     
                     if(SDL_GetTicks() - s1 >200){
                     game->send_data(new_socket, hello, strlen(hello), 0);
-                    game->read_data(new_socket , buffer , 6 ) ; 
+                    game->read_data(new_socket , buffer , 20 ) ; 
+
+                    std::cout<<buffer<<std::endl; 
                     s1 = SDL_GetTicks() ; 
                     }
 
@@ -155,7 +157,7 @@ int s2 = 0 ;
 
         int sock = 0, valread;
         struct sockaddr_in serv_addr;
-        char buffer[6] = {0};
+        char buffer[20] = {0};
         if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         {
             printf("\n Socket creation error \n");
@@ -208,12 +210,13 @@ int s2 = 0 ;
                     game->update();
                     game->render();
 
-                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos);
+                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos) + ".";
                     const char *hello = s.c_str();
                     if(SDL_GetTicks() - s2 > 200){
                     game->send_data(sock, hello, strlen(hello), 0);
-                    game->read_data(sock, buffer, 6);
-                    printf("%s\n", buffer);
+                    game->read_data(sock, buffer, 10);
+                    
+                 std::cout<<buffer<<std::endl; 
                     s2 = SDL_GetTicks () ; 
                     }
                 }
