@@ -15,7 +15,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #define PORT 9898
-char cs = 'c';
+char cs = 's';
 
 Game *game = nullptr;
 int main(int argc, char *argv[])
