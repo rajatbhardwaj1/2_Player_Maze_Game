@@ -6,6 +6,12 @@
 #include <SDL2/SDL_image.h>
 #include "game.hpp"
 #include <iostream>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 class Game
 {
 
@@ -19,12 +25,14 @@ public:
     void disp_startscreen();
     void disp_instructions() ; 
     static void AddTile(int id, int x, int y);
-
+    void read_data(int new_socket , char * buffer , int l);
+    void send_data(int new_socket , const char * hello , int len , int z) ; 
     void handleEvents();
     bool running() { return isRunning; }
 
     static SDL_Renderer *renderer, *renderer1;
     static SDL_Event event;
+    int xpos , ypos ,expos , eypos ;
 
 private:
     bool isRunning;

@@ -408,6 +408,15 @@ void Game ::handleEvents()
 		break;
 	}
 }
+
+void Game::read_data(int new_socket , char * buffer , int l)
+{
+	read(new_socket, buffer, 1024);
+}
+void Game::send_data(int new_socket , const char *  hello , int len  , int z )
+{
+	    send(new_socket, hello, strlen(hello), 0);
+}
 void Game::update()
 {
 	cnt++;
@@ -439,6 +448,9 @@ void Game::update()
 
 	map1->mapxpos = -player1->xpos;
 	map1->mapypos = -player1->ypos;
+	xpos = player1->xpos ;
+	ypos = player1 ->ypos ; 
+
 }
 void Game::render()
 {

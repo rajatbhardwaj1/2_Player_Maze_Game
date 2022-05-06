@@ -47,6 +47,7 @@ GameObject::GameObject(const char *texturesheet, int x, int y)
     SDL_RendererFlip spriteflip = SDL_FLIP_NONE;
 }
 
+
 void GameObject::update()
 {
 
