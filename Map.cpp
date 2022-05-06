@@ -195,3 +195,17 @@ void Map::DisplayInstructions()
 
     
 }
+void Map::Disp_youlose()
+{
+src.x = src.y = 0 ;
+dest.x = dest.y = 0 ; 
+dest.h  = 100 *6;
+    dest.w = 150 *6;
+    
+
+}
+
+void Map::Disp_youwin() 
+{
+
+}

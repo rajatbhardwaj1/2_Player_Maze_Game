@@ -33,6 +33,8 @@ public:
     static SDL_Renderer *renderer, *renderer1;
     static SDL_Event event;
     int xpos , ypos ,expos , eypos ;
+    int gameover ;
+    int player1_wins ;
 
 private:
     bool isRunning;

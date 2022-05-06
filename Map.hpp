@@ -10,6 +10,9 @@ public:
     void LoadMap(int arr[15000]);
     void StartScreen() ;
     void DisplayInstructions() ; 
+    void Disp_youlose();
+    void Disp_youwin();
+    
     static void LoadMap1(std::string path, int x, int y);
     int mapxvel = 0;
     int mapyvel = 0;

@@ -19,11 +19,13 @@ SDL_Event Game ::event;
 
 SDL_Renderer *Game ::renderer = nullptr;
 SDL_Renderer *gRenderer;
-GameObject *player1 , *enemy ;
+GameObject *player1, *enemy;
 
-std::string status  = "GO to LHC! " ; 
+std::string status = "GO to LHC! ";
 Game::Game()
 {
+	gameover = 0;
+	player1_wins = 0;
 }
 Game ::~Game()
 {
@@ -91,9 +93,7 @@ TTF_Font *gFont = NULL;
 
 // Rendered texture
 LTexture gTextTexture;
-LTexture player1_health , player1_energy , player1_status;
-
-
+LTexture player1_health, player1_energy, player1_status;
 
 LTexture::LTexture()
 {
@@ -302,15 +302,13 @@ bool init()
 	return success;
 }
 
-
 void close()
 {
 	// Free loaded images
 	gTextTexture.free();
 	player1_energy.free();
-	player1_health.free() ; 
-	player1_status.free() ;
-
+	player1_health.free();
+	player1_status.free();
 
 	// Free global font
 	TTF_CloseFont(gFont);
@@ -356,7 +354,7 @@ void Game ::init(const char *title, int xpos, int ypos, int width, int height, b
 		map1 = new Map();
 
 		player1 = new GameObject("p1p2.png", 866, 84);
-		enemy = new GameObject("p2combined.png" , 718 , 84) ; 
+		enemy = new GameObject("p2combined.png", 718, 84);
 
 		int imgFlags = IMG_INIT_PNG;
 		if (!(IMG_Init(imgFlags) & imgFlags))
@@ -381,8 +379,6 @@ void Game ::init(const char *title, int xpos, int ypos, int width, int height, b
 		{
 			// Render text
 			SDL_Color textColor = {0xff, 0, 0};
-			
-
 		}
 		// Main loop flag
 
@@ -412,48 +408,54 @@ void Game ::handleEvents()
 	}
 }
 
-void Game::read_data(int new_socket , char * buffer , int l)
+void Game::read_data(int new_socket, char *buffer, int l)
 {
 	read(new_socket, buffer, 1024);
 }
-void Game::send_data(int new_socket , const char *  hello , int len  , int z )
+void Game::send_data(int new_socket, const char *hello, int len, int z)
 {
-	    send(new_socket, hello, strlen(hello), 0);
+	send(new_socket, hello, strlen(hello), 0);
 }
 void Game::update()
 {
 	cnt++;
 	SDL_Color textColor = {0xff, 0, 0};
-	if(player1->completed_lect_1)
+	if (player1->completed_lect_1)
 	{
 		status = "Go to library";
-		
 	}
-	if(player1->completed_library)
+	if (player1->completed_library)
 	{
-		status = "Go to LHC" ;
+		status = "Go to LHC";
 	}
-	if(player1->completed_lect_2)
+	if (player1->completed_lect_2)
 	{
-		status = "Go to Play" ;
-
+		status = "Go to Play";
 	}
-	if(player1->completed_play)
+	if (player1->completed_play)
 	{
-		status = "Done!" ;
+		status = "Done!";
 	}
-			gTextTexture.loadFromRenderedText("Player Scores 44", textColor);
-			player1_energy.loadFromRenderedText("ENERGY "+std::to_string(player1->energy - player1->nenergy), textColor) ;
-			player1_health.loadFromRenderedText("HEALTH "+std::to_string(player1->health - player1->nhealth) , textColor);
-			player1_status.loadFromRenderedText("STATUS: "+status , textColor) ;
+	gTextTexture.loadFromRenderedText("Player Scores 44", textColor);
+	player1_energy.loadFromRenderedText("ENERGY " + std::to_string(player1->energy - player1->nenergy), textColor);
+	player1_health.loadFromRenderedText("HEALTH " + std::to_string(player1->health - player1->nhealth), textColor);
+	player1_status.loadFromRenderedText("STATUS: " + status, textColor);
 	player1->update();
 
-enemy->update1(expos , eypos) ; 
+	enemy->update1(expos, eypos);
 	map1->mapxpos = -player1->xpos;
 	map1->mapypos = -player1->ypos;
-	xpos = player1->xpos ;
-	ypos = player1 ->ypos ; 
-
+	xpos = player1->xpos;
+	ypos = player1->ypos;
+	
+	if(player1->mission_failed)
+	{
+		gameover = 1 ; 
+	}
+	if(player1->completed_objectives)
+	{
+		player1_wins = 1 ; 
+	}
 }
 void Game::render()
 {
@@ -464,11 +466,11 @@ void Game::render()
 	// Render current frame
 
 	player1->Render();
-	enemy->Render()  ;
+	enemy->Render();
 	gTextTexture.render(0, 0);
-	player1_energy.render(250  , 0) ;
-	player1_health.render(440 , 0 ) ;
-	player1_status.render(610, 0 ) ; 
+	player1_energy.render(250, 0);
+	player1_health.render(440, 0);
+	player1_status.render(610, 0);
 	SDL_RenderPresent(Game::renderer);
 }
 void Game::disp_startscreen()
@@ -476,10 +478,10 @@ void Game::disp_startscreen()
 	map1->StartScreen();
 	SDL_RenderPresent(Game::renderer);
 }
-void Game::disp_instructions() 
+void Game::disp_instructions()
 {
 	map1->DisplayInstructions();
-	SDL_RenderPresent(Game::renderer) ;
+	SDL_RenderPresent(Game::renderer);
 }
 void Game::clean()
 {

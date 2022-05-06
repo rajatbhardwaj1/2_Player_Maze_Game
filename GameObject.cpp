@@ -317,10 +317,11 @@ void GameObject::update()
     if (completed_objectives)
         std::cout << "completed_objectives" << std::endl;
 
-    if (health + nhealth <= 0 || energy + nenergy <= 0)
+    if (health - nhealth <= 0 || energy - nenergy <= 0)
     {
         mission_failed = true;
     }
+   std:: cout<<health-nhealth<<","<<energy-nenergy<<std::endl ; 
 
     if (Game::event.type == SDL_KEYUP)
     {

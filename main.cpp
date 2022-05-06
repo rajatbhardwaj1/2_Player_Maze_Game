@@ -15,17 +15,17 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #define PORT 9898
-char cs = 's';
+char cs = 'c';
 
 Game *game = nullptr;
 int main(int argc, char *argv[])
 {
 
-int s1 = 0 ; 
-int s2 = 0 ;
+    int s1 = 0;
+    int s2 = 0;
     if (cs == 's')
     {
-        
+
         int server_fd, new_socket, valread;
         struct sockaddr_in address;
         int opt = 1;
@@ -76,6 +76,9 @@ int s2 = 0 ;
         bool startscreen = true;
 
         bool instructionscreen = false;
+        bool youwin = false;
+        bool youlose = false;
+
         const int FPS = 60;
         const int frameDelay = 1000 / FPS;
         Uint32 frameStart;
@@ -83,62 +86,74 @@ int s2 = 0 ;
 
         game = new Game();
         game->init(
-            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false 
+            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false
 
         );
         while (game->running())
         {
             if (!startscreen)
             {
-                if (!instructionscreen)
+                if (!instructionscreen && !youlose && !youlose)
                 {
 
                     game->handleEvents();
                     game->update();
                     game->render();
                     const char *hello;
-                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos)+"." ;
+                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos) + ".";
                     hello = s.c_str();
-                    
-                   
-                    uint32_t snt =  game->xpos + 10000*game->ypos ;
-                    uint32_t recvd ;
 
-                    send(new_socket , &snt , sizeof(snt) , 0  ) ; 
+                    uint32_t snt = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
+                    uint32_t recvd;
 
-                    recv(new_socket , &recvd , sizeof(recvd) , 0 ) ;
+                    send(new_socket, &snt, sizeof(snt), 0);
 
+                    recv(new_socket, &recvd, sizeof(recvd), 0);
 
+                    std::cout << "snt,rcv = " << snt << "," << recvd << "," << game->gameover << std::endl;
 
-                    // int excord , eycord;
-                    // std::string s1 = "" , s2 = "";
-                    // bool second  = false ;
-                    // for(char pp: buffer)
-                    // {
-                    //     if(pp == ',')
-                    //     {
-                    //         second = true ;
-                    //     }
-                    //     else 
-                    //     {
-                    //         if(pp == '.')break;
-                    //         else 
-                    //         {
-                    //             if(second)s2+= pp ;
-                    //             else s1 += pp ;
-                    //         }
-                    //     }
-                    // }
-                    // game->expos = stoi(s1);
-                    // game->eypos = stoi(s2) ; 
-                    game->expos = recvd % 10000 ;
-                    recvd /= 10000;
-                    game->eypos = recvd %10000 ; 
+                    game->expos = recvd % 1000;
+                    recvd /= 1000;
+                    game->eypos = recvd % 1000;
+                    recvd /= 1000;
+                    if (recvd % 10 == 1)
+                    {
+                        youlose = true;
+                    }
+                    recvd /= 10;
+                    if (recvd % 10 == 1)
+                    {
+                        youwin = true;
+                    }
 
+                    s1 = SDL_GetTicks();
+                }
+                else if (youlose)
+                {
+                    game->handleEvents();
+                    SDL_Rect a, b;
+                    a.x = a.y = 0;
+                    a.w = 4800;
+                    a.h = 3200;
+                    b.h = 100 * 6;
+                    b.x = b.y = 0;
 
+                    b.w = 150 * 6;
+                    Texturemanager::dispscreen("you_win.png",a  , b  );
 
-                    s1 = SDL_GetTicks() ; 
-                    
+                }
+                else if (youwin)
+                {
+                    game->handleEvents();
+                    SDL_Rect a, b;
+                    a.x = a.y = 0;
+                    a.w = 4800;
+                    a.h = 3200;
+                    b.h = 100 * 6;
+                    b.x = b.y = 0;
+
+                    b.w = 150 * 6;
+                    Texturemanager::dispscreen("you_lose.png",  a   , b ) ;
 
                 }
                 else
@@ -186,7 +201,7 @@ int s2 = 0 ;
     }
     else
     {
-
+        bool youwin = false, youlose = false;
         int sock = 0, valread;
         struct sockaddr_in serv_addr;
         char buffer[20] = {0};
@@ -228,37 +243,73 @@ int s2 = 0 ;
 
         game = new Game();
         game->init(
-            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false 
+            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false
 
         );
         while (game->running())
         {
             if (!startscreen)
             {
-                if (!instructionscreen)
+                if (!instructionscreen && !youwin && !youlose)
+
                 {
 
                     game->handleEvents();
                     game->update();
                     game->render();
 
-                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos) + ".";
-                    const char *hello = s.c_str();
-                    
                     // game->send_data(sock, hello, strlen(hello), 0);
                     // game->read_data(sock, buffer, 20);
-                    
-                    u_int32_t snd , recvd ; 
-                    snd =  game->xpos + 10000*game->ypos ;
-                    send(sock , &snd , sizeof(snd) , 0) ;
-                    
-                    recv(sock , &recvd , sizeof(recvd) , 0 ) ;
 
-                    game->expos = recvd % 10000 ;
-                    recvd /= 10000;
-                    game->eypos = recvd %10000 ; 
-                    s2 = SDL_GetTicks () ; 
+                    u_int32_t snd, recvd;
+                    snd = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
+                    send(sock, &snd, sizeof(snd), 0);
+
+                    recv(sock, &recvd, sizeof(recvd), 0);
+                    std::cout << "snt , rcv = " << snd << "," << recvd << "," << game->gameover << std::endl;
+
+                    game->expos = recvd % 1000;
+                    recvd /= 1000;
+                    game->eypos = recvd % 1000;
+                    recvd /= 1000;
+                    if (recvd % 10 == 1)
+                    {
+                        youlose = true;
+                    }
+                    recvd /= 10;
+                    if (recvd % 10 == 1)
+                    {
+                        youwin = true;
+                    }
+
+                    s2 = SDL_GetTicks();
+                }
+                else if (youwin)
+                {
+                    game->handleEvents();
+
+                    SDL_Rect a, b;
+                    a.x = a.y = 0;
+                    a.w = 4800;
+                    a.h = 3200;
+                    b.h = 100 * 6;
+                    b.x = b.y = 0;
+
+                    b.w = 150 * 6;
+                    Texturemanager::dispscreen("you_win.png",a  , b  );
+                }
+                else if (youlose)
+                {
+                    game->handleEvents();
+                    SDL_Rect a, b;
+                    a.x = a.y = 0;
+                    a.w = 4800;
+                    a.h = 3200;
+                    b.h = 100 * 6;
+                    b.x = b.y = 0;
                     
+                    b.w = 150 * 6;
+                    Texturemanager::dispscreen("you_lose.png",  a   , b ) ;
                 }
                 else
                 {
