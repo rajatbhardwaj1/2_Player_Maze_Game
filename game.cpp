@@ -443,7 +443,6 @@ void Game::update()
 			player1_energy.loadFromRenderedText("ENERGY "+std::to_string(player1->energy - player1->nenergy), textColor) ;
 			player1_health.loadFromRenderedText("HEALTH "+std::to_string(player1->health - player1->nhealth) , textColor);
 			player1_status.loadFromRenderedText("STATUS: "+status , textColor) ;
-	std::cout << player1->xpos << ", " << player1->ypos << "," << lvl1[((player1->xpos + 32) / 6) + (150 * ((player1->ypos + 29) / 7))] << std::endl;
 	player1->update();
 
 	map1->mapxpos = -player1->xpos;
