@@ -15,7 +15,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #define PORT 9898
-char cs = 'c';
+char cs = 's';
 Game *game = nullptr;
 int main(int argc, char *argv[])
 {
@@ -138,10 +138,7 @@ int main(int argc, char *argv[])
             }
             frameStart = SDL_GetTicks();
             frameTime = SDL_GetTicks() - frameStart;
-            if (frameDelay > frameTime)
-            {
-                SDL_Delay(frameDelay - frameTime);
-            }
+            
         }
     }
     else
@@ -246,10 +243,7 @@ int main(int argc, char *argv[])
             }
             frameStart = SDL_GetTicks();
             frameTime = SDL_GetTicks() - frameStart;
-            if (frameDelay > frameTime)
-            {
-                SDL_Delay(frameDelay - frameTime);
-            }
+            
         }
     }
     game->clean();
