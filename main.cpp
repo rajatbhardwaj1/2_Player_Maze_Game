@@ -214,7 +214,7 @@ int s2 = 0 ;
                     const char *hello = s.c_str();
                     if(SDL_GetTicks() - s2 > 200){
                     game->send_data(sock, hello, strlen(hello), 0);
-                    game->read_data(sock, buffer, 10);
+                    game->read_data(sock, buffer, 20);
                     
                  std::cout<<buffer<<std::endl; 
                     s2 = SDL_GetTicks () ; 
