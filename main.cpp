@@ -23,9 +23,8 @@ int main(int argc, char *argv[])
 
     int s1 = 0;
     int s2 = 0;
-    if (cs == 's')
+ if (cs == 's')
     {
-
         int server_fd, new_socket, valread;
         struct sockaddr_in address;
         int opt = 1;
@@ -69,6 +68,7 @@ int main(int argc, char *argv[])
             perror("accept");
             exit(EXIT_FAILURE);
         }
+   
 
         SDL_Texture *start_screen;
         start_screen = Texturemanager::LoadTexture("startscreen.png");
@@ -93,15 +93,14 @@ int main(int argc, char *argv[])
         {
             if (!startscreen)
             {
-                if (!instructionscreen && !youlose && !youlose)
+                
+                if (!instructionscreen && !youwin && !youlose && !game->gameover && !game->player1_wins)
                 {
 
                     game->handleEvents();
                     game->update();
                     game->render();
                     const char *hello;
-                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos) + ".";
-                    hello = s.c_str();
 
                     uint32_t snt = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
                     uint32_t recvd;
@@ -110,10 +109,31 @@ int main(int argc, char *argv[])
 
                     recv(new_socket, &recvd, sizeof(recvd), 0);
 
-                    std::cout << "snt,rcv = " << snt << "," << recvd << "," << game->gameover << std::endl;
+                    std::cout << "lol snt,rcv = " << snt << "," << recvd << "," << game->gameover << std::endl;
 
+                    int x , y  , z ;
+                    x = game->expos ; 
+                    y = game->eypos ; 
+                    z = recvd%1000 ;
                     game->expos = recvd % 1000;
                     recvd /= 1000;
+                    if(recvd%1000 != y || x != z )
+                    {
+                        game->anime = true ;
+                    }
+                    else 
+                    {
+                        game->anime = false ; 
+
+                    }
+                    if(x > z)
+                    {
+                        game->flipped = true ;
+                    }
+                    else 
+                    {
+                        game->flipped = false ;
+                    }
                     game->eypos = recvd % 1000;
                     recvd /= 1000;
                     if (recvd % 10 == 1)
@@ -128,8 +148,14 @@ int main(int argc, char *argv[])
 
                     s1 = SDL_GetTicks();
                 }
-                else if (youlose)
+                else if (youlose || game->player1_wins)
                 {
+                    uint32_t snt = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
+                    uint32_t recvd;
+
+                    send(new_socket, &snt, sizeof(snt), 0);
+
+                    recv(new_socket, &recvd, sizeof(recvd), 0);
                     game->handleEvents();
                     SDL_Rect a, b;
                     a.x = a.y = 0;
@@ -139,11 +165,18 @@ int main(int argc, char *argv[])
                     b.x = b.y = 0;
 
                     b.w = 150 * 6;
-                    Texturemanager::dispscreen("you_win.png",a  , b  );
-
+                    std::cout << "server wins !\n";
+                    game->disp_youwin();
                 }
-                else if (youwin)
+                
+                else if (youwin || game->gameover  )
                 {
+                    uint32_t snt = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
+                    uint32_t recvd;
+
+                    send(new_socket, &snt, sizeof(snt), 0);
+
+                    recv(new_socket, &recvd, sizeof(recvd), 0);
                     game->handleEvents();
                     SDL_Rect a, b;
                     a.x = a.y = 0;
@@ -153,8 +186,9 @@ int main(int argc, char *argv[])
                     b.x = b.y = 0;
 
                     b.w = 150 * 6;
-                    Texturemanager::dispscreen("you_lose.png",  a   , b ) ;
-
+                    game->disp_youlose();
+                    SDL_RenderPresent(Game::renderer);
+                    std::cout << "server lose ! \n";
                 }
                 else
                 {
@@ -250,7 +284,7 @@ int main(int argc, char *argv[])
         {
             if (!startscreen)
             {
-                if (!instructionscreen && !youwin && !youlose)
+                if (!instructionscreen && !youwin && !youlose && !game->gameover && !game->player1_wins)
 
                 {
 
@@ -268,16 +302,36 @@ int main(int argc, char *argv[])
                     recv(sock, &recvd, sizeof(recvd), 0);
                     std::cout << "snt , rcv = " << snd << "," << recvd << "," << game->gameover << std::endl;
 
+                    int x  ,y ,z ;
+                    x = game->expos;
+                    y = game ->eypos ; 
                     game->expos = recvd % 1000;
+                    z = recvd%1000 ; 
                     recvd /= 1000;
                     game->eypos = recvd % 1000;
+                    if(y != recvd%1000 || x != z)
+                    {
+                        game->anime=true; 
+                    }
+                    else 
+                    {
+                        game->anime = false ;
+                    }
+                    if(x > z)
+                    {
+                        game->flipped = true ;
+                    }
+                    else 
+                    {
+                        game->flipped = false ;
+                    }
                     recvd /= 1000;
-                    if (recvd % 10 == 1)
+                    if (recvd % 10 == 1 || game->gameover)
                     {
                         youlose = true;
                     }
                     recvd /= 10;
-                    if (recvd % 10 == 1)
+                    if (recvd % 10 == 1 || game->player1_wins)
                     {
                         youwin = true;
                     }
@@ -286,6 +340,12 @@ int main(int argc, char *argv[])
                 }
                 else if (youwin)
                 {
+                    u_int32_t snd, recvd;
+                    snd = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
+                    send(sock, &snd, sizeof(snd), 0);
+
+                    recv(sock, &recvd, sizeof(recvd), 0);
+
                     game->handleEvents();
 
                     SDL_Rect a, b;
@@ -296,23 +356,32 @@ int main(int argc, char *argv[])
                     b.x = b.y = 0;
 
                     b.w = 150 * 6;
-                    Texturemanager::dispscreen("you_win.png",a  , b  );
+                    game->disp_youwin();
+                    std::cout << "client wins! ";
                 }
                 else if (youlose)
                 {
+                    u_int32_t snd, recvd;
+                    snd = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
+                    send(sock, &snd, sizeof(snd), 0);
+
+                    recv(sock, &recvd, sizeof(recvd), 0);
                     game->handleEvents();
+
                     SDL_Rect a, b;
                     a.x = a.y = 0;
                     a.w = 4800;
                     a.h = 3200;
                     b.h = 100 * 6;
                     b.x = b.y = 0;
-                    
+
                     b.w = 150 * 6;
-                    Texturemanager::dispscreen("you_lose.png",  a   , b ) ;
+                    game->disp_youlose();
+                    std::cout << "client lose !\n";
                 }
                 else
                 {
+
                     game->handleEvents();
                     game->disp_instructions();
 

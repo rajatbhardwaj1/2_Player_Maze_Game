@@ -24,17 +24,21 @@ public:
     void clean();
     void disp_startscreen();
     void disp_instructions() ; 
+    void disp_youwin();
+    void disp_youlose() ;
     static void AddTile(int id, int x, int y);
     void read_data(int new_socket , char * buffer , int l);
     void send_data(int new_socket , const char * hello , int len , int z) ; 
     void handleEvents();
     bool running() { return isRunning; }
-
+    bool flipped  ; 
     static SDL_Renderer *renderer, *renderer1;
     static SDL_Event event;
     int xpos , ypos ,expos , eypos ;
     int gameover ;
     int player1_wins ;
+    bool anime;
+    SDL_RendererFlip spriteflipen; 
 
 private:
     bool isRunning;

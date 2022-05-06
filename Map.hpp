@@ -12,7 +12,7 @@ public:
     void DisplayInstructions() ; 
     void Disp_youlose();
     void Disp_youwin();
-    
+
     static void LoadMap1(std::string path, int x, int y);
     int mapxvel = 0;
     int mapyvel = 0;
@@ -29,7 +29,8 @@ private:
     SDL_Texture *new_map;
     SDL_Texture *iitd_map ;
     SDL_Texture *start_screen ;
-    SDL_Texture *instruction_screen ; 
+    SDL_Texture *instruction_screen , *you_win , *you_lose  ; 
+
     
     int map[15000];
 };

@@ -9,9 +9,12 @@ private:
 
     SDL_Texture *objTexture;
     SDL_Rect srcRect, DestRect;
-    SDL_RendererFlip spriteflip = SDL_FLIP_NONE;
 
 public:
+    SDL_RendererFlip spriteflip ;
+    SDL_RendererFlip spriteflipen ;
+
+
     int xpos;
     int ypos;
     int speedx ; 
@@ -52,6 +55,6 @@ public:
 
     ~GameObject();
     void update();
-    void update1(int x , int y) ; 
+    void update1(int x , int y , bool isanimated , bool flipped)  ; 
     void Render();
 };

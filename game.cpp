@@ -26,6 +26,9 @@ Game::Game()
 {
 	gameover = 0;
 	player1_wins = 0;
+	anime = false;
+	flipped  = false ;
+
 }
 Game ::~Game()
 {
@@ -442,19 +445,19 @@ void Game::update()
 	player1_status.loadFromRenderedText("STATUS: " + status, textColor);
 	player1->update();
 
-	enemy->update1(expos, eypos);
+	enemy->update1(expos, eypos, anime , flipped);
 	map1->mapxpos = -player1->xpos;
 	map1->mapypos = -player1->ypos;
 	xpos = player1->xpos;
 	ypos = player1->ypos;
-	
-	if(player1->mission_failed)
+
+	if (player1->mission_failed)
 	{
-		gameover = 1 ; 
+		gameover = 1;
 	}
-	if(player1->completed_objectives)
+	if (player1->completed_objectives)
 	{
-		player1_wins = 1 ; 
+		player1_wins = 1;
 	}
 }
 void Game::render()
@@ -478,9 +481,20 @@ void Game::disp_startscreen()
 	map1->StartScreen();
 	SDL_RenderPresent(Game::renderer);
 }
+
 void Game::disp_instructions()
 {
 	map1->DisplayInstructions();
+	SDL_RenderPresent(Game::renderer);
+}
+void Game ::disp_youwin()
+{
+	map1->Disp_youwin();
+	SDL_RenderPresent(Game::renderer);
+}
+void Game::disp_youlose()
+{
+	map1->Disp_youlose();
 	SDL_RenderPresent(Game::renderer);
 }
 void Game::clean()
