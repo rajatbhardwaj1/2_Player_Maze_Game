@@ -80,10 +80,9 @@ int main(int argc, char *argv[])
 
         game = new Game();
         game->init(
-            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, true
+            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false 
 
         );
-        std::cout<<"g" ; 
         while (game->running())
         {
             if (!startscreen)
@@ -97,10 +96,9 @@ int main(int argc, char *argv[])
                     valread = read(new_socket, buffer, 1024);
                     printf("%s\n", buffer);
                     const char *hello;
-                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos);
+                    std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos) + "\n";
                     hello = s.c_str();
-                    game->read_data(new_socket, buffer, 1024);
-                    printf("%s\n", buffer);
+                    
                     game->send_data(new_socket, hello, strlen(hello), 0);
                 }
                 else
@@ -191,7 +189,7 @@ int main(int argc, char *argv[])
 
         game = new Game();
         game->init(
-            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, true
+            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false 
 
         );
         while (game->running())
