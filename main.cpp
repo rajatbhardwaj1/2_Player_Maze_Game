@@ -15,7 +15,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #define PORT 9898
-char cs = 's';
+char cs = 'c';
 
 Game *game = nullptr;
 int main(int argc, char *argv[])
@@ -100,13 +100,45 @@ int s2 = 0 ;
                     std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos)+"." ;
                     hello = s.c_str();
                     
-                    if(SDL_GetTicks() - s1 >200){
-                    game->send_data(new_socket, hello, strlen(hello), 0);
-                    game->read_data(new_socket , buffer , 20 ) ; 
+                   
+                    uint32_t snt =  game->xpos + 10000*game->ypos ;
+                    uint32_t recvd ;
 
-                    std::cout<<buffer<<std::endl; 
+                    send(new_socket , &snt , sizeof(snt) , 0  ) ; 
+
+                    recv(new_socket , &recvd , sizeof(recvd) , 0 ) ;
+
+
+
+                    // int excord , eycord;
+                    // std::string s1 = "" , s2 = "";
+                    // bool second  = false ;
+                    // for(char pp: buffer)
+                    // {
+                    //     if(pp == ',')
+                    //     {
+                    //         second = true ;
+                    //     }
+                    //     else 
+                    //     {
+                    //         if(pp == '.')break;
+                    //         else 
+                    //         {
+                    //             if(second)s2+= pp ;
+                    //             else s1 += pp ;
+                    //         }
+                    //     }
+                    // }
+                    // game->expos = stoi(s1);
+                    // game->eypos = stoi(s2) ; 
+                    game->expos = recvd % 10000 ;
+                    recvd /= 10000;
+                    game->eypos = recvd %10000 ; 
+
+
+
                     s1 = SDL_GetTicks() ; 
-                    }
+                    
 
                 }
                 else
@@ -212,13 +244,21 @@ int s2 = 0 ;
 
                     std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos) + ".";
                     const char *hello = s.c_str();
-                    if(SDL_GetTicks() - s2 > 200){
-                    game->send_data(sock, hello, strlen(hello), 0);
-                    game->read_data(sock, buffer, 20);
                     
-                 std::cout<<buffer<<std::endl; 
+                    // game->send_data(sock, hello, strlen(hello), 0);
+                    // game->read_data(sock, buffer, 20);
+                    
+                    u_int32_t snd , recvd ; 
+                    snd =  game->xpos + 10000*game->ypos ;
+                    send(sock , &snd , sizeof(snd) , 0) ;
+                    
+                    recv(sock , &recvd , sizeof(recvd) , 0 ) ;
+
+                    game->expos = recvd % 10000 ;
+                    recvd /= 10000;
+                    game->eypos = recvd %10000 ; 
                     s2 = SDL_GetTicks () ; 
-                    }
+                    
                 }
                 else
                 {

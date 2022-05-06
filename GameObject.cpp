@@ -47,7 +47,27 @@ GameObject::GameObject(const char *texturesheet, int x, int y)
     SDL_RendererFlip spriteflip = SDL_FLIP_NONE;
 }
 
+void GameObject::update1(int x , int y , bool animate)
+{
+    if(!animate)
+    {
+    srcRect.x = 0 ;
+  
+    }
+    else 
+    {
+        srcRect.x = srcRect.w * ((SDL_GetTicks() / speed) % 2);
+        
+    }
+      srcRect.y = 0 ;
+    srcRect.w = 1024;
+    srcRect.h = 1024 ; 
+    DestRect.x = x;
+    DestRect.y = y;
+    DestRect.w = 32;
+    DestRect.h = 32;
 
+}
 void GameObject::update()
 {
 

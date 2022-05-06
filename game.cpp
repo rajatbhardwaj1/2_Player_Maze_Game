@@ -19,7 +19,8 @@ SDL_Event Game ::event;
 
 SDL_Renderer *Game ::renderer = nullptr;
 SDL_Renderer *gRenderer;
-GameObject *player1;
+GameObject *player1 , *enemy ;
+
 std::string status  = "GO to LHC! " ; 
 Game::Game()
 {
@@ -355,6 +356,8 @@ void Game ::init(const char *title, int xpos, int ypos, int width, int height, b
 		map1 = new Map();
 
 		player1 = new GameObject("p1p2.png", 866, 84);
+		enemy = new GameObject("p2combined.png" , 718 , 84) ; 
+
 		int imgFlags = IMG_INIT_PNG;
 		if (!(IMG_Init(imgFlags) & imgFlags))
 		{
@@ -445,6 +448,7 @@ void Game::update()
 			player1_status.loadFromRenderedText("STATUS: "+status , textColor) ;
 	player1->update();
 
+enemy->update1(expos , eypos) ; 
 	map1->mapxpos = -player1->xpos;
 	map1->mapypos = -player1->ypos;
 	xpos = player1->xpos ;
@@ -460,7 +464,7 @@ void Game::render()
 	// Render current frame
 
 	player1->Render();
-
+	enemy->Render()  ;
 	gTextTexture.render(0, 0);
 	player1_energy.render(250  , 0) ;
 	player1_health.render(440 , 0 ) ;

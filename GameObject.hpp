@@ -52,5 +52,6 @@ public:
 
     ~GameObject();
     void update();
+    void update1(int x , int y) ; 
     void Render();
 };
