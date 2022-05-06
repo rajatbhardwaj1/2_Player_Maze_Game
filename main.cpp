@@ -15,7 +15,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #define PORT 9898
-char cs = 's';
+char cs = 'c';
 Game *game = nullptr;
 int main(int argc, char *argv[])
 {
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
         struct sockaddr_in address;
         int opt = 1;
         int addrlen = sizeof(address);
-        char buffer[1024] = {0};
+        char buffer[10] = {0};
 
         // Creating socket file descriptor
         if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
                     game->handleEvents();
                     game->update();
                     game->render();
-                    valread = read(new_socket, buffer, 1024);
+                    valread = read(new_socket, buffer, 10);
                     printf("%s\n", buffer);
                     const char *hello;
                     std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos) + "\n";
@@ -138,7 +138,10 @@ int main(int argc, char *argv[])
             }
             frameStart = SDL_GetTicks();
             frameTime = SDL_GetTicks() - frameStart;
-            
+            if (frameDelay > frameTime)
+            {
+                SDL_Delay(frameDelay - frameTime);
+            }
         }
     }
     else
@@ -146,8 +149,7 @@ int main(int argc, char *argv[])
 
         int sock = 0, valread;
         struct sockaddr_in serv_addr;
-        char *hello = "Hello from client";
-        char buffer[1024] = {0};
+        char buffer[10] = {0};
         if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
         {
             printf("\n Socket creation error \n");
@@ -203,7 +205,7 @@ int main(int argc, char *argv[])
                     std::string s = std::to_string(game->xpos) + "," + std::to_string(game->ypos);
                     const char *hello = s.c_str();
                     game->send_data(sock, hello, strlen(hello), 0);
-                    game->read_data(sock, buffer, 1024);
+                    game->read_data(sock, buffer, 10);
                     printf("%s\n", buffer);
                 }
                 else
@@ -243,7 +245,10 @@ int main(int argc, char *argv[])
             }
             frameStart = SDL_GetTicks();
             frameTime = SDL_GetTicks() - frameStart;
-            
+            if (frameDelay > frameTime)
+            {
+                SDL_Delay(frameDelay - frameTime);
+            }
         }
     }
     game->clean();
