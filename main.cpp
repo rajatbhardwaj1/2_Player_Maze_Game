@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
 
         // Convert IPv4 and IPv6 addresses from text to binary
         // form
-        if (inet_pton(AF_INET, "10.184.45.145", &serv_addr.sin_addr) <= 0)
+        if (inet_pton(AF_INET, "10.194.62.38", &serv_addr.sin_addr) <= 0)
         {
             printf(
                 "\nInvalid address/ Address not supported \n");
