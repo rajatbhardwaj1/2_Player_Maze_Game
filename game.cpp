@@ -283,7 +283,7 @@ bool init()
 			else
 			{
 				// Initialize renderer color
-				SDL_SetRenderDrawColor(Game::renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_SetRenderDrawColor(Game::renderer, 0x0, 0x0, 0x0, 0x0);
 
 				// Initialize PNG loading
 				int imgFlags = IMG_INIT_PNG;
@@ -350,7 +350,7 @@ void Game ::init(const char *title, int xpos, int ypos, int width, int height, b
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer)
 		{
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			std ::cout << "renderer created" << std ::endl;
 		}
 		isRunning = true;

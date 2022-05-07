@@ -170,8 +170,8 @@ void Map::StartScreen()
     src.h = 3200;
     src.w = 4800;
     dest.x = dest.y = 0;
-    dest.h = 100 * 6.8;
-    dest.w = 150 * 6;
+    dest.h = 100 * 6.6;
+    dest.w = 150 * 5.5;
 
     Texturemanager::Draw(start_screen, src, dest);
 }

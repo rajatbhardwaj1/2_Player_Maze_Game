@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     start_screen = Texturemanager::LoadTexture("startscreen.png");
     game = new Game();
     game->init(
-        "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820    , 650, true
+        "IIT-D RUSH ", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 860    , 650, true 
 
     );
     bool startscreen = true;
@@ -156,7 +156,6 @@ int main(int argc, char *argv[])
                     game->handleEvents();
                     game->update();
                     game->render();
-                    const char *hello;
 
                     uint32_t snt = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
                     uint32_t recvd;
@@ -201,7 +200,6 @@ int main(int argc, char *argv[])
                         youwin = true;
                     }
 
-                    s1 = SDL_GetTicks();
                 }
                 else if (youlose || game->player1_wins|| game->gameover)
                 {
@@ -318,8 +316,6 @@ int main(int argc, char *argv[])
             return -1;
         }
 
-        SDL_Texture *start_screen;
-        start_screen = Texturemanager::LoadTexture("startscreen.png");
 
         const int FPS = 60;
         const int frameDelay = 1000 / FPS;
@@ -382,7 +378,6 @@ int main(int argc, char *argv[])
                         youwin = true;
                     }
 
-                    s2 = SDL_GetTicks();
                 }
                 else if (youwin || game->gameover)
                 {
