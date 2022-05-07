@@ -9,3 +9,17 @@
 
 
 To run the code: Run make, then run ./game on both the devices.
+
+
+Libraries used
+1.  SDL2 - ```apt-get install libsdl2-dev```
+2.  SDL2 image library ```sudo apt install libsdl2-image-dev```
+3. SDL ttf library ```sudo apt-get install libsdl2-ttf-dev```
+
+
+Sources 
+1. https://lazyfoo.net/tutorials/SDL/index.php
+
+2. https://www.youtube.com/watch?v=QQzAHcojEKg&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx&index=1
+
+3. https://www.geeksforgeeks.org/socket-programming-cc/
