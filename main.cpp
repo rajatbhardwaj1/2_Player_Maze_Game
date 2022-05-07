@@ -14,16 +14,57 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#define PORT 9898
-char cs = 'c';
+#define PORT 1210
+char cs = 's';
 
 Game *game = nullptr;
 int main(int argc, char *argv[])
 {
+    int starttime;
+    SDL_Texture *start_screen;
+    start_screen = Texturemanager::LoadTexture("startscreen.png");
+    game = new Game();
+    game->init(
+        "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 640, false
+
+    );
+    bool startscreen = true;
+
+    bool instructionscreen = false;
+
+    while (1)
+    {
+        game->disp_startscreen();
+        game->handleEvents();
+        if (Game::event.type == SDL_KEYDOWN)
+        {
+
+            if (Game::event.key.keysym.sym == SDLK_s)
+            {
+                startscreen = false;
+                game->start_time_of_game = SDL_GetTicks();
+                break;
+            }
+            if (Game::event.key.keysym.sym == SDLK_c)
+            {
+                startscreen = false;
+                game->start_time_of_game = SDL_GetTicks();
+
+                cs = 'c';
+                break;
+            }
+            if (Game::event.key.keysym.sym == SDLK_i)
+            {
+                startscreen = false;
+                instructionscreen = true;
+                break;
+            }
+        }
+    }
 
     int s1 = 0;
     int s2 = 0;
- if (cs == 's')
+    if (cs == 's')
     {
         int server_fd, new_socket, valread;
         struct sockaddr_in address;
@@ -68,14 +109,7 @@ int main(int argc, char *argv[])
             perror("accept");
             exit(EXIT_FAILURE);
         }
-   
 
-        SDL_Texture *start_screen;
-        start_screen = Texturemanager::LoadTexture("startscreen.png");
-
-        bool startscreen = true;
-
-        bool instructionscreen = false;
         bool youwin = false;
         bool youlose = false;
 
@@ -84,16 +118,11 @@ int main(int argc, char *argv[])
         Uint32 frameStart;
         int frameTime;
 
-        game = new Game();
-        game->init(
-            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false
-
-        );
         while (game->running())
         {
             if (!startscreen)
             {
-                
+
                 if (!instructionscreen && !youwin && !youlose && !game->gameover && !game->player1_wins)
                 {
 
@@ -111,28 +140,27 @@ int main(int argc, char *argv[])
 
                     std::cout << "lol snt,rcv = " << snt << "," << recvd << "," << game->gameover << std::endl;
 
-                    int x , y  , z ;
-                    x = game->expos ; 
-                    y = game->eypos ; 
-                    z = recvd%1000 ;
+                    int x, y, z;
+                    x = game->expos;
+                    y = game->eypos;
+                    z = recvd % 1000;
                     game->expos = recvd % 1000;
                     recvd /= 1000;
-                    if(recvd%1000 != y || x != z )
+                    if (recvd % 1000 != y || x != z)
                     {
-                        game->anime = true ;
+                        game->anime = true;
                     }
-                    else 
+                    else
                     {
-                        game->anime = false ; 
-
+                        game->anime = false;
                     }
-                    if(x > z)
+                    if (x > z)
                     {
-                        game->flipped = true ;
+                        game->flipped = true;
                     }
-                    else 
+                    else
                     {
-                        game->flipped = false ;
+                        game->flipped = false;
                     }
                     game->eypos = recvd % 1000;
                     recvd /= 1000;
@@ -165,11 +193,11 @@ int main(int argc, char *argv[])
                     b.x = b.y = 0;
 
                     b.w = 150 * 6;
-                    std::cout << "server wins !\n";
-                    game->disp_youwin();
+                    game->disp_youlose();
+                    std::cout << "server lose ! \n";
                 }
-                
-                else if (youwin || game->gameover  )
+
+                else if (youwin || game->gameover)
                 {
                     uint32_t snt = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
                     uint32_t recvd;
@@ -186,9 +214,8 @@ int main(int argc, char *argv[])
                     b.x = b.y = 0;
 
                     b.w = 150 * 6;
-                    game->disp_youlose();
-                    SDL_RenderPresent(Game::renderer);
-                    std::cout << "server lose ! \n";
+                    std::cout << "server wins !\n";
+                    game->disp_youwin();
                 }
                 else
                 {
@@ -250,7 +277,7 @@ int main(int argc, char *argv[])
 
         // Convert IPv4 and IPv6 addresses from text to binary
         // form
-        if (inet_pton(AF_INET, "10.194.63.63", &serv_addr.sin_addr) <= 0)
+        if (inet_pton(AF_INET, "10.184.45.145", &serv_addr.sin_addr) <= 0)
         {
             printf(
                 "\nInvalid address/ Address not supported \n");
@@ -267,19 +294,11 @@ int main(int argc, char *argv[])
         SDL_Texture *start_screen;
         start_screen = Texturemanager::LoadTexture("startscreen.png");
 
-        bool startscreen = true;
-
-        bool instructionscreen = false;
         const int FPS = 60;
         const int frameDelay = 1000 / FPS;
         Uint32 frameStart;
         int frameTime;
 
-        game = new Game();
-        game->init(
-            "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false
-
-        );
         while (game->running())
         {
             if (!startscreen)
@@ -302,28 +321,28 @@ int main(int argc, char *argv[])
                     recv(sock, &recvd, sizeof(recvd), 0);
                     std::cout << "snt , rcv = " << snd << "," << recvd << "," << game->gameover << std::endl;
 
-                    int x  ,y ,z ;
+                    int x, y, z;
                     x = game->expos;
-                    y = game ->eypos ; 
+                    y = game->eypos;
                     game->expos = recvd % 1000;
-                    z = recvd%1000 ; 
+                    z = recvd % 1000;
                     recvd /= 1000;
                     game->eypos = recvd % 1000;
-                    if(y != recvd%1000 || x != z)
+                    if (y != recvd % 1000 || x != z)
                     {
-                        game->anime=true; 
+                        game->anime = true;
                     }
-                    else 
+                    else
                     {
-                        game->anime = false ;
+                        game->anime = false;
                     }
-                    if(x > z)
+                    if (x > z)
                     {
-                        game->flipped = true ;
+                        game->flipped = true;
                     }
-                    else 
+                    else
                     {
-                        game->flipped = false ;
+                        game->flipped = false;
                     }
                     recvd /= 1000;
                     if (recvd % 10 == 1 || game->gameover)
@@ -338,7 +357,7 @@ int main(int argc, char *argv[])
 
                     s2 = SDL_GetTicks();
                 }
-                else if (youwin)
+                else if (youwin || game->gameover)
                 {
                     u_int32_t snd, recvd;
                     snd = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
@@ -359,7 +378,7 @@ int main(int argc, char *argv[])
                     game->disp_youwin();
                     std::cout << "client wins! ";
                 }
-                else if (youlose)
+                else if (youlose || game->player1_wins)
                 {
                     u_int32_t snd, recvd;
                     snd = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;

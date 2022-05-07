@@ -11,11 +11,12 @@ GameObject::GameObject(const char *texturesheet, int x, int y)
     speedx = 0;
     speedy = 0;
     speed = 100;
-    energy = 10;
-    health = 10;
+    energy = 13;
+    health = 13;
     nhealth = 0;
     nenergy = 0;
     frames = 2;
+    start_time_of_game = 0 ;
     isAnime = false;
     completed_lect_1 = false;
     completed_lect_2 = false;
@@ -304,8 +305,8 @@ void GameObject::update()
         inhimardri = false;
     }
 
-    nhealth = SDL_GetTicks() / 3000;
-    nenergy = SDL_GetTicks() / 3000;
+    nhealth =  (SDL_GetTicks() -    start_time_of_game) / 3000;
+    nenergy =  (SDL_GetTicks() -    start_time_of_game) / 3000;
 
     if (time_spend_in_lhc >= 10 && !completed_lect_1)
     {

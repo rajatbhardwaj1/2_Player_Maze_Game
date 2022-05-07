@@ -27,6 +27,7 @@ Game::Game()
 	gameover = 0;
 	player1_wins = 0;
 	anime = false;
+	start_time_of_game = 0 ;
 	flipped  = false ;
 
 }
@@ -421,6 +422,7 @@ void Game::send_data(int new_socket, const char *hello, int len, int z)
 }
 void Game::update()
 {
+	player1->start_time_of_game = start_time_of_game ; 
 	cnt++;
 	SDL_Color textColor = {0xff, 0, 0};
 	if (player1->completed_lect_1)

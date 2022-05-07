@@ -19,6 +19,7 @@ public:
     int ypos;
     int speedx ; 
     int speedy ;
+    int start_time_of_game ; 
     bool completed_lect_1 ;
     bool completed_lect_2 ;
     bool library ;

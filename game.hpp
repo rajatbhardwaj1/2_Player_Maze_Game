@@ -37,6 +37,7 @@ public:
     int xpos , ypos ,expos , eypos ;
     int gameover ;
     int player1_wins ;
+    int start_time_of_game ; 
     bool anime;
     SDL_RendererFlip spriteflipen; 
 
