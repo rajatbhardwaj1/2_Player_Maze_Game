@@ -34,14 +34,15 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        if(startscreen)
-        {
-        game->disp_startscreen();
-        game->handleEvents(); 
         if(!game->running())
         {
             break;
         }
+        
+        if(startscreen)
+        {
+        game->disp_startscreen();
+        game->handleEvents(); 
         
         //resolve this 
 
