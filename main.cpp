@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     start_screen = Texturemanager::LoadTexture("startscreen.png");
     game = new Game();
     game->init(
-        "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 640, false
+        "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 700, true
 
     );
     bool startscreen = true;
@@ -35,7 +35,15 @@ int main(int argc, char *argv[])
     while (1)
     {
         game->disp_startscreen();
-        game->handleEvents();
+        game->handleEvents(); 
+        if(!game->running())
+        {
+            break;
+        }
+        
+        //resolve this 
+
+
         if (Game::event.type == SDL_KEYDOWN)
         {
 
@@ -64,6 +72,7 @@ int main(int argc, char *argv[])
 
     int s1 = 0;
     int s2 = 0;
+    if(game->running()){
     if (cs == 's')
     {
         int server_fd, new_socket, valread;
@@ -441,6 +450,7 @@ int main(int argc, char *argv[])
                 SDL_Delay(frameDelay - frameTime);
             }
         }
+    }
     }
     game->clean();
 }
