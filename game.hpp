@@ -40,7 +40,7 @@ public:
     int start_time_of_game ; 
     bool anime;
     SDL_RendererFlip spriteflipen; 
-
+    
 private:
     bool isRunning;
     int cnt;
