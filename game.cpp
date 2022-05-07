@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <string>
 #include <cmath>
+#include <SDL2/SDL_mixer.h>
 Map *map1;
 SDL_Event Game ::event;
 
