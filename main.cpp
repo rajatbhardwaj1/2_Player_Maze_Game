@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     start_screen = Texturemanager::LoadTexture("startscreen.png");
     game = new Game();
     game->init(
-        "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900  , 700, false
+        "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 820    , 650, true
 
     );
     bool startscreen = true;

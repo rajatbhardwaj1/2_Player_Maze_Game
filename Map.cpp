@@ -109,10 +109,6 @@ int lvl1[15000] = {
 };
 Map::Map()
 {
-    dirt = Texturemanager::LoadTexture("dirt.png");
-    grass = Texturemanager::LoadTexture("grass.png");
-    water = Texturemanager::LoadTexture("water.png");
-    new_map = Texturemanager::LoadTexture("grb.png");
     iitd_map = Texturemanager::LoadTexture("iitd_map.png");
     start_screen = Texturemanager::LoadTexture("startscreen.png");
     instruction_screen = Texturemanager::LoadTexture("inst.jpeg");
@@ -174,8 +170,8 @@ void Map::StartScreen()
     src.h = 3200;
     src.w = 4800;
     dest.x = dest.y = 0;
-    dest.h = 100 * 7.2;
-    dest.w = 150 * 6.6;
+    dest.h = 100 * 6.8;
+    dest.w = 150 * 6;
 
     Texturemanager::Draw(start_screen, src, dest);
 }
