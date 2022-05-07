@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     start_screen = Texturemanager::LoadTexture("startscreen.png");
     game = new Game();
     game->init(
-        "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 700, true
+        "IIT-D RUSH ", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900  , 700, false
 
     );
     bool startscreen = true;
@@ -34,6 +34,8 @@ int main(int argc, char *argv[])
 
     while (1)
     {
+        if(startscreen)
+        {
         game->disp_startscreen();
         game->handleEvents(); 
         if(!game->running())
@@ -65,8 +67,23 @@ int main(int argc, char *argv[])
             {
                 startscreen = false;
                 instructionscreen = true;
-                break;
+                
             }
+        }
+        }
+        else if(instructionscreen)
+        {
+             game->handleEvents();
+                    game->disp_instructions();
+
+                    if (Game::event.type == SDL_KEYDOWN)
+                    {
+                        if (Game::event.key.keysym.sym == SDLK_b)
+                        {
+                            startscreen = true;
+                            instructionscreen = false;
+                        }
+                    }
         }
     }
 
@@ -173,19 +190,19 @@ int main(int argc, char *argv[])
                     }
                     game->eypos = recvd % 1000;
                     recvd /= 1000;
-                    if (recvd % 10 == 1)
+                    if (recvd % 10 == 1|| game->gameover)
                     {
                         youlose = true;
                     }
                     recvd /= 10;
-                    if (recvd % 10 == 1)
+                    if (recvd % 10 == 1 || game->player1_wins)
                     {
                         youwin = true;
                     }
 
                     s1 = SDL_GetTicks();
                 }
-                else if (youlose || game->player1_wins)
+                else if (youlose || game->player1_wins|| game->gameover)
                 {
                     uint32_t snt = game->xpos + 1000 * game->ypos + 1000000 * game->player1_wins + 10000000 * game->gameover;
                     uint32_t recvd;
